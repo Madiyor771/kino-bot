@@ -1,4 +1,3 @@
-import asyncio
 import logging
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
@@ -102,8 +101,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif text:
         await update.message.reply_text("❌ Bunday kod topilmadi!")
 
-# Async main funksiyasi (yangi versiya uchun)
-async def main():
+# To'g'ri main funksiyasi (sync, run_polling o'zi async ishlaydi)
+def main():
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
@@ -112,7 +111,7 @@ async def main():
     app.add_handler(MessageHandler(filters.ALL & ~filters.COMMAND, handle_message))
 
     print("Bot ishga tushdi... 24/7")
-    await app.run_polling(drop_pending_updates=True)
+    app.run_polling(drop_pending_updates=True)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
