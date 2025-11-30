@@ -1,7 +1,12 @@
+import asyncio
+import logging
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 import json
 import os
+
+# Logging sozlash (xatolarni ko'rish uchun)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 # === Sizning ma'lumotlaringiz ===
 TOKEN = "7688599401:AAGowg5Zb9_RCbiEONxdgS0ijwYTKz-ue0c"
@@ -97,7 +102,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif text:
         await update.message.reply_text("❌ Bunday kod topilmadi!")
 
-def main():
+# Async main funksiyasi (yangi versiya uchun)
+async def main():
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
@@ -106,7 +112,7 @@ def main():
     app.add_handler(MessageHandler(filters.ALL & ~filters.COMMAND, handle_message))
 
     print("Bot ishga tushdi... 24/7")
-    app.run_polling()
+    await app.run_polling(drop_pending_updates=True)
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
